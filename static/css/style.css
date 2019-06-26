@@ -1,0 +1,24 @@
+.image_area{
+    width: 400px;
+    height: 400px;
+}
+
+.control{
+    width: 400px;
+    height: 450px;
+    border: 1px solid #111111;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.control_1{
+    width: 400px;
+    height: 200px;
+    border: 1px solid #5eff00;
+}
+
+.control_2{
+    width: 400px;
+    height: 200px;
+    border: 1px solid #098ea0;
+}
