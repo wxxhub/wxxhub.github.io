@@ -1,0 +1,104 @@
+<!-- 代码借用 https://github.com/zhangrj/JS-QRCode -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR Web</title>
+
+<link rel="stylesheet" href="css/style.css">
+<script type="text/javascript" src="js/qrcode.min.js"></script>
+<link rel="stylesheet" href="../static/css/style.css">
+<script type="text/javascript" src="../static/js/qrcode.min.js"></script>
+</head>
+
+<body>
+<div class="image_area" id="qr_image"> </div>
+<br>
+<div class="control">
+    <div class="control_1">
+        <input type="radio" name="type" value="instruction" checked="checked">指令
+        <input type="radio" name="type" value="data">数据
+        <br>
+        demo控制<input type="radio" name="instruction_head" value="demo" checked="checked">
+        <br>
+        <input type="radio" name="demo" value="none" checked="checked">none
+        <input type="radio" name="demo" value="marathon">marathon
+        <br>
+        语言播报<input type="radio" name="instruction_head" value="voice">
+        <br>
+        <input type="checkbox" name="broadcast" value="ip" checked="checked">ip
+        <input type="checkbox" name="broadcast" value="battery">电量
+        <br>
+        topic:<input type="text" id="topic1">
+        <br>
+        data:<input type="text" id="text1">
+    </div>
+    <div class="control_2">
+        <input type="radio" name="type2" value="none" checked="checked">不选
+        <input type="radio" name="type2" value="data">数据
+        <br>
+    </div>
+    <button type="button" onclick="generateCode()">生成二维码</button>
+</div>
+
+<script type="text/javascript">	
+    function generateCode () {	
+        //清空二维码区域，否则重复点击会多次生成
+        document.getElementById("qr_image").innerHTML="";
+        
+        var data = getData();
+        
+        var qrcode = new QRCode(document.getElementById("qr_image"), {
+        text : data,
+        width : 400,
+        height : 400,
+        //容错能力设为H档次，最高
+        correctLevel : QRCode.CorrectLevel.H 
+        });
+        
+        //生成二维码
+        qrcode.makeCode();
+    }	
+    function getData () {
+        var type_radio = document.getElementsByName("type");
+
+        var data = "";
+
+        if (type_radio[0].checked == true){
+            data += "instruction:[";
+            var head_radio = document.getElementsByName("instruction_head");
+            if (head_radio[0].checked == true) {
+                data += head_radio[0].value + ":";
+                var demo = document.getElementsByName("demo");
+                for (var i = 0; i < demo.length; ++i) {
+                    if (demo[i].checked == true) {
+                        data += demo[i].value + "]";
+                        break;
+                    }
+                }
+            } else {
+                data += head_radio[1].value + ":";
+                var broadcast = document.getElementsByName("broadcast");
+
+                if (broadcast[0].checked == true) {
+                    data += broadcast[0].value;
+                }
+
+                for (var i = 1; i < broadcast.length; ++i) {
+                    if (broadcast[i].checked == true) {
+                        data += "," + broadcast[i].value;
+                    }
+                }
+                data += "]";
+            }
+        } else {
+            data += "data:["+document.getElementById("topic1").value+":"+document.getElementById("text1").value+"]";
+        }
+        return data;
+    }
+    </script>
+</body>
+
+</html>
